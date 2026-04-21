@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+docker-compose*.yml
+Dockerfile
+.dockerignore
+
+# Data (don't copy to image)
+data/
+scan-logs/
+backup/
+
+# Database
+*.db
+*.db-journal
+
+# Environment
+.env
+.env.*
+
+# Logs
+*.log
+
+# Backups
+*.tar.gz
+
+# Documentation
+README.md
+*.md
+
+# Version control
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

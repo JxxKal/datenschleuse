@@ -1,0 +1,28 @@
+[Unit]
+Description=Cloudflare Tunnel for Datenschleuse
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/cloudflared tunnel run datenschleuse --config /root/.cloudflared/config.yml
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+
+# Resource limits
+MemoryLimit=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=multi-user.target
+
+# Installation:
+# 1. Copy this file to /etc/systemd/system/cloudflared.service
+# 2. sudo systemctl daemon-reload
+# 3. sudo systemctl enable cloudflared
+# 4. sudo systemctl start cloudflared
+# 5. sudo systemctl status cloudflared
+# 6. sudo journalctl -u cloudflared -f

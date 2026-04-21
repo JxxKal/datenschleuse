@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: datenschleuse-filebrowser
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./data:/srv
+      - ./filebrowser-config.json:/.filebrowser.json
+      - ./filebrowser-db.db:/database.db
+    environment:
+      - FB_ROOT=/srv
+    restart: unless-stopped
+    depends_on:
+      - clamav
+    networks:
+      - datenschleuse-net
+
+  clamav:
+    image: clamav/clamav:latest
+    container_name: datenschleuse-clamav
+    volumes:
+      - clamav-db:/var/lib/clamav
+      - ./data:/srv:ro
+    environment:
+      - FRESHCLAM_CHECKS=24
+    restart: unless-stopped
+    networks:
+      - datenschleuse-net
+    healthcheck:
+      test: ["CMD", "clamscan", "--version"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  clamav-scanner:
+    image: busybox:latest
+    container_name: datenschleuse-scanner
+    command: >
+      sh -c "while true; do
+        find /srv -type f -newer /tmp/last_scan 2>/dev/null | while read file; do
+          echo \"[$(date)] Scanning: $$file\" >> /var/log/scans.log;
+          clamscan -v -i \"$$file\" >> /var/log/scans.log 2>&1;
+        done;
+        touch /tmp/last_scan;
+        sleep 3600;
+      done"
+    volumes:
+      - ./data:/srv:ro
+      - ./scan-logs:/var/log
+      - /var/run/clamav:/var/run/clamav:ro
+    depends_on:
+      clamav:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - datenschleuse-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: datenschleuse-nginx
+    ports:
+      - "127.0.0.1:8000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./data:/srv:ro
+    depends_on:
+      - filebrowser
+    restart: unless-stopped
+    networks:
+      - datenschleuse-net
+
+volumes:
+  clamav-db:
+    driver: local
+
+networks:
+  datenschleuse-net:
+    driver: bridge

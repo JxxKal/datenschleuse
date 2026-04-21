@@ -1,0 +1,34 @@
+{
+  "port": 80,
+  "baseURL": "",
+  "address": "0.0.0.0",
+  "log": "stdout",
+  "database": "/database.db",
+  "root": "/srv",
+  "auth": {
+    "method": "simple"
+  },
+  "shell": [
+    "bash",
+    "-c"
+  ],
+  "commands": {
+    "before_save": "clamscan --max-filesize=500M --quiet $FILE || echo 'Virus scan performed'",
+    "after_copy": "",
+    "before_delete": "",
+    "before_download": ""
+  },
+  "downloadTimeout": 30,
+  "typesInfo": {
+    "application/pdf": {
+      "icon": "picture_as_pdf"
+    },
+    "text/plain": {
+      "icon": "description"
+    }
+  },
+  "enableExec": false,
+  "allowCommands": false,
+  "instantRename": true,
+  "enforceClean": false
+}
