@@ -33,13 +33,13 @@ ingress:
   
   # Neu hinzufügen für Datenschleuse:
   - hostname: datenschleuse.yourdomain.com
-    service: http://localhost:8080
+    service: http://192.168.1.230:9090
     disableChunkedEncoding: true
     
   # Großer Upload/Download (optional)
   - hostname: datenschleuse.yourdomain.com
     path: /direct/*
-    service: http://localhost:8000
+    service: http://192.168.1.230:8001
     
   # Fallback für andere Seiten
   - service: http_status:404
@@ -70,11 +70,11 @@ ingress:
   # Neu: Datenschleuse
   - hostname: mycompany.com
     path: /datenschleuse*
-    service: http://localhost:8080
+    service: http://192.168.1.230:9090
     
   - hostname: mycompany.com
     path: /datenschleuse-direct/*
-    service: http://localhost:8000
+    service: http://192.168.1.230:8001
     
   - service: http_status:404
 ```

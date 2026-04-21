@@ -86,7 +86,7 @@ Besuche http://localhost:8080 und erstelle einen Admin-Account beim ersten Login
 
 ### FileBrowser UI
 ```
-http://localhost:8080
+http://192.168.1.230:9090
 ```
 
 Features:
@@ -97,14 +97,14 @@ Features:
 
 ### Direct Download (große Dateien optimiert)
 ```
-http://localhost:8000/direct/myfile.iso
+http://192.168.1.230:8001/direct/myfile.iso
 ```
 
 Direkter Download ohne FileBrowser UI, optimiert für große Dateien.
 
 ### Scan-Status
 ```
-http://localhost:8000/scan-status
+http://192.168.1.230:8001/scan-status
 ```
 
 Live-Log der ClamAV-Scans.
